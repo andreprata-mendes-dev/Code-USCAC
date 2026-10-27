@@ -1,0 +1,7 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" role="img" aria-labelledby="title">
+  <title id="title">Echo heart and sound wave</title>
+  <rect width="256" height="256" rx="72" fill="#FF6B5E"/>
+  <path id="heart" d="M128 210 50 138C15 105 38 53 81 53c21 0 38 12 47 31 9-19 26-31 47-31 43 0 66 52 31 85z" fill="#FFFDFA"/>
+  <clipPath id="heartClip"><path d="M128 210 50 138C15 105 38 53 81 53c21 0 38 12 47 31 9-19 26-31 47-31 43 0 66 52 31 85z"/></clipPath>
+  <path d="M36 132h54l17-29 20 56 20-44 14 17h59" fill="none" stroke="#78352F" stroke-width="12" stroke-linecap="round" stroke-linejoin="round" clip-path="url(#heartClip)"/>
+</svg>

@@ -1,0 +1,394 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Echo is a family voice companion with multilingual browser voices, locally saved profiles, and optional on-device AI speech generation on Apple Silicon Macs.">
+  <link rel="icon" type="image/svg+xml" href="logo.svg">
+  <title>Echo — Family Voice Companion</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible+Next:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+  <!-- FontAwesome Icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+
+  <!-- ================= FRONT PAGE / APP LANDING SCREEN ================= -->
+  <section id="welcome-screen" class="screen active">
+    <div class="welcome-card">
+      <div class="app-logo">
+        <i class="fa-solid fa-heart-pulse"></i>
+      </div>
+      <h1 class="app-title">Echo</h1>
+      <p class="app-tagline">A gentle, customizable voice companion for family moments.</p>
+
+      <!-- Senior Memory Anchor -->
+      <div class="memory-anchor">
+        <div class="anchor-date" id="landing-date">Today is Loading...</div>
+        <div class="anchor-time" id="landing-time">--:-- --</div>
+        <div class="anchor-location"><i class="fa-solid fa-wave-square"></i> Browser-based demo · no location tracking</div>
+      </div>
+
+      <button class="btn-primary-large" id="btn-enter-app">
+        <i class="fa-solid fa-phone"></i> Enter Echo
+      </button>
+
+      <div class="quick-reassurance">
+        <p><i class="fa-solid fa-circle-info"></i> Demo preview · no home sensors or safety alerts connected</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ================= MAIN APP SHELL ================= -->
+  <div id="app-shell" class="screen">
+
+    <!-- Top Header -->
+    <header class="top-header">
+      <div class="header-branding">
+        <i class="fa-solid fa-heart-pulse icon-logo"></i>
+        <span>Echo</span>
+      </div>
+      <div class="header-actions">
+        <!-- Quick Language Switcher -->
+        <label class="sr-only" for="lang-select">Spoken phrase language and speech recognition language</label>
+        <select id="lang-select" class="header-select" title="Choose the language for spoken sample phrases and microphone speech recognition">
+          <option value="en-US">🇺🇸 English</option>
+          <option value="es-ES">🇪🇸 Español</option>
+          <option value="fr-FR">🇫🇷 Français</option>
+          <option value="de-DE">🇩🇪 Deutsch</option>
+          <option value="tl-PH">🇵🇭 Tagalog</option>
+          <option value="zh-CN">🇨🇳 中文</option>
+          <option value="hi-IN">🇮🇳 हिन्दी</option>
+          <option value="it-IT">🇮🇹 Italiano</option>
+          <option value="ja-JP">🇯🇵 日本語</option>
+        </select>
+        <!-- Accessibility High Contrast Toggle -->
+        <button class="icon-btn" id="btn-high-contrast" title="Toggle High Contrast" aria-label="Toggle high contrast mode" aria-pressed="false">
+          <i class="fa-solid fa-circle-half-stroke"></i>
+        </button>
+      </div>
+    </header>
+
+    <!-- Navigation Tabs -->
+    <nav class="main-nav">
+      <button class="nav-btn active" id="nav-loved-ones" data-action="switch-tab" data-tab="loved-ones">
+        <i class="fa-solid fa-users"></i>
+        <span>Family</span>
+      </button>
+      <button class="nav-btn" id="nav-voice-studio" data-action="switch-tab" data-tab="voice-studio">
+        <i class="fa-solid fa-microphone-lines"></i>
+        <span>Voice Studio</span>
+      </button>
+      <button class="nav-btn" id="nav-safety" data-action="switch-tab" data-tab="safety">
+        <i class="fa-solid fa-house-medical"></i>
+        <span>Safety</span>
+      </button>
+      <button class="nav-btn" id="nav-settings" data-action="switch-tab" data-tab="settings">
+        <i class="fa-solid fa-sliders"></i>
+        <span>Settings</span>
+      </button>
+    </nav>
+
+    <!-- Main Content Area -->
+    <main class="content-area">
+
+      <!-- TAB 1: LOVED ONES -->
+      <section id="tab-loved-ones" class="tab-content active">
+        <div class="section-banner">
+          <h2>Tap to Talk</h2>
+          <p>Play browser-voice phrases, replay an original recording, or create a new sentence with a consented voice sample using the local Mac model in Voice Studio.</p>
+        </div>
+
+        <div class="loved-ones-grid" id="loved-ones-list">
+          <!-- Dynamically populated by JS -->
+        </div>
+
+        <div class="quick-add-container">
+          <button class="btn-secondary" data-action="switch-tab" data-tab="voice-studio">
+            <i class="fa-solid fa-user-plus"></i> Add a Family Voice Profile
+          </button>
+        </div>
+      </section>
+
+      <!-- TAB 2: VOICE STUDIO (LOCAL RECORDING & AI SPEECH) -->
+      <section id="tab-voice-studio" class="tab-content">
+        <div class="section-banner">
+          <h2>Voice Studio</h2>
+          <p>Record with permission, add the exact words spoken, then generate a new sentence with the on-device model on this Mac. Browser/device voices remain available separately.</p>
+        </div>
+
+        <div class="studio-card">
+          <h3><i class="fa-solid fa-user-pen"></i> Step 1: Person Profile</h3>
+          <div class="form-grid">
+            <div class="form-group">
+              <label for="profile-name">Full Name:</label>
+              <input type="text" id="profile-name" placeholder="e.g., Sarah Jenkins" class="app-input">
+            </div>
+            <div class="form-group">
+              <label for="profile-relation">Relationship:</label>
+              <input type="text" id="profile-relation" placeholder="e.g., Granddaughter / Son" class="app-input">
+            </div>
+          </div>
+
+          <h3><i class="fa-solid fa-microphone"></i> Step 2: Record a Consented Voice Sample</h3>
+
+          <div class="recording-privacy-note" role="note">
+            <strong>Local recording only.</strong> Record up to 30 seconds. The sample stays in this browser until you ask the local Mac server to generate speech; it is never sent to a cloud voice service. Record and generate only your own voice or a voice whose speaker has explicitly agreed.
+          </div>
+
+          <label class="record-consent" for="voice-consent">
+            <input type="checkbox" id="voice-consent">
+            <span>I am the speaker, or I have the speaker's explicit permission to record this sample and use it for local AI speech generation.</span>
+          </label>
+
+          <div class="recorder-box">
+            <div class="rec-status" id="rec-status-text" role="status" aria-live="polite">Recording requires this speaker confirmation and microphone permission. Clips are stored in this browser only.</div>
+            <div class="rec-timer" id="rec-timer" aria-label="Recording time">00:00</div>
+
+            <div class="recorder-buttons">
+              <button class="btn-rec" id="btn-record" type="button" disabled>
+                <i class="fa-solid fa-microphone"></i> Start recording
+              </button>
+              <button class="btn-rec-stop" id="btn-stop-rec" type="button" disabled>
+                <i class="fa-solid fa-square"></i> Stop
+              </button>
+            </div>
+
+            <div id="audio-preview-container" class="audio-preview-box hidden">
+              <p><strong id="audio-preview-label">Recorded voice clip</strong></p>
+              <audio id="audio-playback" controls preload="none"></audio>
+              <p class="audio-preview-note" id="audio-preview-note">The audio player replays the original recording only.</p>
+              <button class="btn-secondary hidden" id="btn-discard-pending-clip" type="button">Discard new take</button>
+            </div>
+
+            <label class="check-item remove-saved-clip-row hidden" id="remove-saved-clip-row" for="remove-saved-clip">
+              <input type="checkbox" id="remove-saved-clip">
+              <span>Remove the existing recording when this profile is saved.</span>
+            </label>
+          </div>
+
+          <div class="reference-transcript-panel">
+            <h3><i class="fa-solid fa-closed-captioning"></i> Step 3: Type the Exact Words in the Recording</h3>
+            <p>The model needs an accurate transcript that matches the sample. Keep it short and type exactly what the speaker said.</p>
+            <label for="voice-clip-transcript">Recording transcript</label>
+            <textarea id="voice-clip-transcript" class="app-input" rows="3" maxlength="800" placeholder="Type the words spoken in the saved recording"></textarea>
+          </div>
+
+          <h3><i class="fa-solid fa-volume-high"></i> Step 4: Choose this person's browser voice</h3>
+          <div class="form-grid profile-voice-picker">
+            <div class="form-group">
+              <label for="profile-voice-select">Voice language / accent:</label>
+              <select id="profile-voice-select" class="app-input">
+                <option value="">Automatic — match spoken language</option>
+              </select>
+              <small>Pick a voice installed in your browser/device. The voice is saved with this family profile. For other phrase languages, Echo chooses the closest matching installed voice when available.</small>
+            </div>
+            <div class="form-group profile-voice-test">
+              <label>Preview</label>
+              <button class="btn-secondary" id="btn-test-profile-voice" type="button">Test this voice</button>
+            </div>
+          </div>
+
+          <h3><i class="fa-solid fa-sliders"></i> Step 5: Tune browser speech</h3>
+          <div class="tuning-grid">
+            <div class="tuning-control">
+              <label>Voice Pitch (Tone): <span id="pitch-val">1.0</span></label>
+              <input type="range" id="voice-pitch" min="0.5" max="1.5" step="0.1" value="1.0">
+            </div>
+            <div class="tuning-control">
+              <label>Speaking Pace: <span id="rate-val">0.85</span></label>
+              <input type="range" id="voice-rate" min="0.5" max="1.2" step="0.05" value="0.85">
+            </div>
+          </div>
+
+          <div class="local-ai-panel" id="local-ai-panel">
+            <h3><i class="fa-solid fa-microchip"></i> Step 6: Generate a Sentence with the Voice Sample</h3>
+            <p class="local-ai-explainer">On-device Qwen3-TTS generation is available only in the Mac VS Code edition, not on this public website. The public site never sends voice clips or text to its host or a cloud voice service. In the local edition, the saved sample, exact transcript, and requested sentence go only to the loopback Echo process on this Apple Silicon Mac. Generated speech is temporary unless downloaded; the first use downloads model weights, and temporary files and reference cache are cleared after each request.</p>
+            <div class="local-ai-status" id="local-ai-status" role="status" aria-live="polite">Checking whether the local Mac model is available…</div>
+            <div id="local-ai-request-controls" class="local-ai-request-controls">
+            <button class="btn-secondary" id="btn-check-local-ai" type="button">Check local model</button>
+
+            <label class="record-consent ai-consent" for="ai-voice-consent">
+              <input type="checkbox" id="ai-voice-consent">
+              <span>I am the speaker or have their explicit permission to generate this sentence from the saved sample on this Mac. This approval applies to one generation only.</span>
+            </label>
+
+            <label for="ai-voice-text">Sentence to generate (up to 500 characters)</label>
+            <textarea id="ai-voice-text" class="app-input" rows="3" maxlength="500" placeholder="Type what you want the recorded voice to say"></textarea>
+            <p class="audio-preview-note" id="ai-language-note">Choose a supported model language in the language menu before generating.</p>
+
+            <button class="btn-primary-large" id="btn-generate-ai-voice" type="button" disabled>
+              <i class="fa-solid fa-wand-magic-sparkles"></i> Generate locally
+            </button>
+            <button class="btn-secondary hidden" id="btn-cancel-ai-generation" type="button">Cancel generation</button>
+            <p class="audio-preview-note">Cancel prevents the result from being returned to this page. Once model inference starts, it may finish locally on this Mac before temporary files and reference cache can be cleared.</p>
+            <p class="local-ai-status" id="ai-generation-status" role="status" aria-live="polite">Save a voice sample and its exact transcript to enable generation.</p>
+
+            <div class="local-ai-output hidden" id="ai-voice-output">
+              <p><strong>Generated on this Mac. This temporary preview is not part of the saved profile.</strong></p>
+              <audio id="ai-generated-audio" controls preload="none"></audio>
+              <a class="btn-secondary" id="btn-download-ai-voice" download="echo-generated-voice.wav">Download generated WAV</a>
+            </div>
+            </div>
+          </div>
+
+          <button class="btn-primary-large" id="btn-save-profile">
+            <i class="fa-solid fa-floppy-disk"></i> Save Profile
+          </button>
+          <button class="btn-secondary hidden" id="btn-cancel-profile-edit" type="button">Cancel editing</button>
+        </div>
+      </section>
+
+      <!-- TAB 3: SAFETY & REMINDERS -->
+      <section id="tab-safety" class="tab-content">
+        <div class="section-banner">
+          <h2>Safety Demo</h2>
+          <p>Example cards only. Echo does not monitor your home or provide medical reminders.</p>
+        </div>
+
+        <div class="demo-disclaimer" role="note">
+          <strong>Demo only — not live information.</strong> These examples are not connected to stove sensors, smart locks, location, clocks, medical records, or alerts. Check appliances and locks directly, and follow medication instructions from your clinician or pharmacist.
+        </div>
+
+        <div class="safety-grid">
+          <div class="safety-card card-green">
+            <div class="card-header">
+              <i class="fa-solid fa-fire-burner"></i>
+              <h3>Kitchen Appliance Check</h3>
+            </div>
+            <div class="safety-status"><i class="fa-solid fa-circle-info"></i> No stove sensor connected</div>
+            <p>This demo cannot tell whether an appliance is on or off.</p>
+          </div>
+
+          <div class="safety-card card-blue">
+            <div class="card-header">
+              <i class="fa-solid fa-door-closed"></i>
+              <h3>Front Door Lock</h3>
+            </div>
+            <div class="safety-status"><i class="fa-solid fa-circle-info"></i> No smart lock connected</div>
+            <p>This demo cannot determine whether a door is locked.</p>
+          </div>
+
+          <div class="safety-card card-amber">
+            <div class="card-header">
+              <i class="fa-solid fa-pills"></i>
+              <h3>Sample Checklist — No Alerts</h3>
+            </div>
+            <div class="med-checklist">
+              <label class="check-item">
+                <input type="checkbox" id="med-morning" data-med="morning">
+                <span>Morning checklist example</span>
+              </label>
+              <label class="check-item">
+                <input type="checkbox" id="med-afternoon" data-med="afternoon">
+                <span>Afternoon checklist example</span>
+              </label>
+              <label class="check-item">
+                <input type="checkbox" id="med-evening" data-med="evening">
+                <span>Evening checklist example</span>
+              </label>
+            </div>
+            <p class="card-footnote">Checkboxes are stored only in this browser. They do not schedule doses or send reminders.</p>
+          </div>
+        </div>
+      </section>
+
+      <!-- TAB 4: SETTINGS -->
+      <section id="tab-settings" class="tab-content">
+        <div class="section-banner">
+          <h2>Accessibility & Preferences</h2>
+          <p>Tailor screen contrast, text sizes, and speaking speeds.</p>
+        </div>
+
+        <div class="settings-card">
+          <div class="privacy-note" role="note"><strong>Privacy:</strong> profiles and reference clips stay in this browser. When you explicitly generate speech, the sample, matching transcript, and requested sentence are processed by a loopback-only server on this Mac. They are not sent to a cloud voice service; generated audio is not saved unless you download it.</div>
+          <div class="setting-item">
+            <div>
+              <strong>Text Display Size</strong>
+              <p>Make screen labels larger and easier to read.</p>
+            </div>
+            <div class="btn-group">
+              <button class="btn-size" type="button" data-font-size="normal">Normal</button>
+              <button class="btn-size" type="button" data-font-size="large">Large</button>
+              <button class="btn-size" type="button" data-font-size="xlarge">X-Large</button>
+            </div>
+          </div>
+
+          <div class="setting-item voice-setting-item">
+            <div class="voice-setting-copy">
+              <strong>Spoken voice language &amp; accent</strong>
+              <p id="voice-help">Loading voices installed on this device…</p>
+            </div>
+            <div class="voice-setting-controls">
+              <label class="sr-only" for="voice-select">Choose spoken voice language and accent</label>
+              <select id="voice-select" class="header-select" aria-describedby="voice-help"><option value="">Automatic — match selected language</option></select>
+              <div class="voice-button-row">
+                <button class="btn-secondary" id="btn-test-voice" type="button">Test voice</button>
+                <button class="btn-secondary" id="btn-refresh-voices" type="button">Refresh voices</button>
+              </div>
+            </div>
+          </div>
+            <details class="voice-help-details">
+              <summary>How do I add more voices?</summary>
+              <p>Echo can use voices provided by your browser or operating system; it cannot install or create them. After installing a voice, return here and choose <strong>Refresh voices</strong>. Your browser decides which installed voices it exposes.</p>
+              <ul>
+                <li><strong>Windows:</strong> Open Narrator settings with <kbd>Win</kbd> + <kbd>Ctrl</kbd> + <kbd>N</kbd>, choose <strong>Add legacy voices</strong>, then in Speech settings use <strong>Manage voices → Add voices</strong>. See <a href="https://support.microsoft.com/en-us/accessibility/windows/narrator/appendix-a-supported-languages-and-voices" target="_blank" rel="noopener noreferrer">Microsoft's voice instructions</a>.</li>
+                <li><strong>macOS:</strong> Open <strong>System Settings → Accessibility → Read &amp; Speak</strong>, open the voice menu, and choose <strong>Manage Voices</strong>. See <a href="https://support.apple.com/en-ca/guide/mac-help/mh27448/mac" target="_blank" rel="noopener noreferrer">Apple's guide</a>.</li>
+                <li><strong>Android:</strong> Open <strong>Settings → Accessibility → Text-to-speech output → Install voice data</strong>, then choose a language. See <a href="https://support.google.com/accessibility/android/answer/6006983?hl=en" target="_blank" rel="noopener noreferrer">Google's instructions</a>.</li>
+              </ul>
+              <p>In CodePen, voice availability and microphone permissions are controlled by the browser/device, not by CodePen. Choose the sample-phrase language in the header; a profile's preferred voice is used for matching languages, with a closest-language fallback for others.</p>
+            </details>
+
+          <div class="setting-item">
+            <div>
+              <strong>High Contrast Vision Mode</strong>
+              <p>Dark background with bold yellow and white text.</p>
+            </div>
+            <button class="btn-secondary" id="btn-high-contrast-settings" type="button">Toggle Mode</button>
+          </div>
+        </div>
+      </section>
+
+    </main>
+  </div>
+
+  <!-- ACTIVE VOICE CALL MODAL OVERLAY -->
+  <div id="call-modal" class="call-modal-overlay">
+    <div class="call-container">
+      <div class="call-header">
+        <div class="call-avatar" id="call-avatar">S</div>
+        <h2 id="call-name">Sarah</h2>
+        <p id="call-relation" class="call-rel">Granddaughter</p>
+        <div class="live-badge"><i class="fa-solid fa-volume-high"></i> Browser speech preview · not a live call</div>
+      </div>
+
+      <div class="speech-box">
+        <p id="call-speech-text" aria-live="polite">A short sample phrase will appear here.</p>
+      </div>
+
+      <div class="waveform-box">
+        <span class="wave-bar"></span>
+        <span class="wave-bar"></span>
+        <span class="wave-bar"></span>
+        <span class="wave-bar"></span>
+        <span class="wave-bar"></span>
+      </div>
+
+      <div class="call-controls">
+        <button class="btn-mic-talk" id="btn-mic-talk">
+          <i class="fa-solid fa-microphone"></i>
+          <span id="mic-btn-label">Tap to Speak</span>
+        </button>
+
+        <button class="btn-end-call" id="btn-end-call">
+          <i class="fa-solid fa-phone-slash"></i> End Preview
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <script src="script.js" defer></script>
+</body>
+</html>
